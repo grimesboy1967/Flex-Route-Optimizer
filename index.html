@@ -134,7 +134,7 @@
       <i class="ti ti-route-2"></i>
       <div>
         <h1>Flex Route Optimizer</h1>
-        <p class="tagline">import → optimize → drive · build 32</p>
+        <p class="tagline">import → optimize → drive · build 34 — with how-to-use guide</p>
         <p class="attribution">Created by J. Scott Robertson</p>
       </div>
     </div>
@@ -142,14 +142,16 @@
 
   <main>
     <nav>
-      <button data-screen="import" class="active">Import</button>
+      <button data-screen="help" class="active">How to Use</button>
+      <button data-screen="import">Import</button>
       <button data-screen="confirm">Confirm</button>
       <button data-screen="route">Route</button>
       <button data-screen="load">Load</button>
       <button data-screen="settings">Settings</button>
     </nav>
 
-    <section id="screen-import" class="screen active"></section>
+    <section id="screen-help" class="screen active"></section>
+    <section id="screen-import" class="screen"></section>
     <section id="screen-confirm" class="screen"></section>
     <section id="screen-route" class="screen"></section>
     <section id="screen-load" class="screen"></section>
@@ -918,7 +920,15 @@ function init() {
   wireImportScreen();
   wireSettingsScreen();
   renderAll();
-  showScreen('import');
+
+  // Only land on the How to Use tab for a genuinely first-ever open (no
+  // stops imported yet). A returning driver mid-shift should land straight
+  // on their active route, not have to click past onboarding every time.
+  const hasStops = Store.state.stops.length > 0;
+  const hasActiveRoute = Store.state.stops.some(s => s.optimizedPosition != null && s.status !== 'completed' && s.status !== 'skipped');
+  if (!hasStops) showScreen('help');
+  else if (hasActiveRoute) showScreen('route');
+  else showScreen('import');
 
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(
@@ -945,11 +955,82 @@ function wireNav() {
 }
 
 function renderAll() {
+  renderHelp();
   renderImport();
   renderConfirm();
   renderRoute();
   renderLoad();
   renderSettings();
+}
+
+// ---------------- Help screen ----------------
+
+function renderHelp() {
+  const el = document.getElementById('screen-help');
+  const section = (icon, title, body) => `
+    <div class="card" style="margin-bottom:12px;">
+      <p style="font-weight:600; margin-bottom:6px;"><i class="ti ${icon}" style="margin-right:6px; color:var(--gold);"></i>${title}</p>
+      <div style="font-size:12px; line-height:1.6; color:var(--text-secondary);">${body}</div>
+    </div>
+  `;
+
+  el.innerHTML = `
+    <p class="muted" style="text-align:center; margin:0 0 14px;">Five steps, start to finish, for one delivery block.</p>
+
+    ${section('ti-camera', '1. Import — bring in your stops', `
+      Open the <b>Import</b> tab. Take a screenshot of your Amazon Flex itinerary
+      (or your photo library screenshot), then tap <b>Add photos</b> and select it.
+      The app reads the addresses and times off the screenshot automatically — a
+      clear, well-lit, non-blurry screenshot works best. Set your shift start/end
+      time and delivery area (city) here too, since those drive the route logic.
+    `)}
+
+    ${section('ti-list-check', '2. Confirm — check what got read', `
+      Every stop the app found shows up here with its address and deadline.
+      OCR isn't perfect — glance over each one and fix anything that looks
+      wrong (a mistyped street number, a missed deadline). Remove any stop
+      that shouldn't be there. When it all looks right, tap
+      <b>Looks good — optimize route</b>.
+    `)}
+
+    ${section('ti-route-2', '3. Route — drive it', `
+      Your stops now show in optimized order, numbered, with an ETA badge on
+      each. Tap <b>Navigate</b> on a stop to open it in Maps. After you drop
+      off, tap <b>Mark delivered</b> — the app moves to the next stop
+      automatically. If a stop shows an <b>at risk</b> badge, its delivery
+      deadline may be tight given the current order — a red banner at the
+      top also flags this for the whole route. Running behind, or made an
+      unplanned stop? Tap <b>Recalculate route</b> to re-optimize everything
+      from where you are right now.
+    `)}
+
+    ${section('ti-package', '4. Load — pack your vehicle first', `
+      Before you leave, check the <b>Load</b> tab. It shows you which order
+      to physically load packages into your vehicle — reverse of delivery
+      order, so the first thing you deliver is the last thing you loaded
+      (easiest to reach). Write each package's stop number on it with a
+      marker so you can match it at a glance.
+    `)}
+
+    ${section('ti-settings', '5. Settings — set it once', `
+      Choose whether Navigate opens Apple Maps or Google Maps, whether the
+      app asks every time or just uses your default, and whether it deletes
+      your itinerary photos after reading them (recommended, since they're
+      no longer needed once stops are imported). <b>Reset all data</b> here
+      wipes everything and starts fresh — use it between delivery blocks if
+      you want a clean slate.
+    `)}
+
+    <div class="card" style="background:var(--gold-dim); border-color:var(--gold);">
+      <p style="font-weight:600; margin-bottom:4px; color:var(--ink);"><i class="ti ti-bulb" style="margin-right:6px; color:var(--gold);"></i>Good to know</p>
+      <p style="font-size:12px; line-height:1.6; margin:0; color:var(--ink);">
+        Everything you import stays on this device only — nothing is sent
+        anywhere. If the app ever seems out of date after an update, delete
+        it from your home screen and re-add it from Safari to get the
+        latest version.
+      </p>
+    </div>
+  `;
 }
 
 // ---------------- Load screen ----------------
