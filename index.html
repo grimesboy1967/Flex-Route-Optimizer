@@ -134,7 +134,7 @@
       <i class="ti ti-route-2"></i>
       <div>
         <h1>Flex Route Optimizer</h1>
-        <p class="tagline">import → optimize → drive · build 36 — completion celebration</p>
+        <p class="tagline">import → optimize → drive · build 37 — cuter randomized celebration</p>
         <p class="attribution">Created by J. Scott Robertson</p>
       </div>
     </div>
@@ -1396,6 +1396,119 @@ function formatTime(iso) {
 
 // ---------------- Route screen ----------------
 
+// ---------------- Completion celebration ----------------
+// A handful of small, original, cute characters (not based on any existing
+// character) shown when every stop is done — picked at random each time
+// so it's not the same image on every route.
+
+function renderCelebration() {
+  const characters = [
+    // Bouncing star with a happy face
+    {
+      animName: 'celeb-bounce',
+      svg: `
+        <path d="M70 8 L83 46 L124 46 L91 70 L103 110 L70 86 L37 110 L49 70 L16 46 L57 46 Z"
+              fill="#f5c542" stroke="#e0a92e" stroke-width="2"/>
+        <circle cx="56" cy="58" r="5.5" fill="#2a2a2a"/>
+        <circle cx="84" cy="58" r="5.5" fill="#2a2a2a"/>
+        <circle cx="57.5" cy="56" r="1.8" fill="#fff"/>
+        <circle cx="85.5" cy="56" r="1.8" fill="#fff"/>
+        <circle cx="48" cy="68" r="5" fill="#f4a0a0" opacity="0.7"/>
+        <circle cx="92" cy="68" r="5" fill="#f4a0a0" opacity="0.7"/>
+        <path d="M58 72 Q70 82 82 72" stroke="#2a2a2a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      `,
+      style: `@keyframes celeb-bounce{ 0%,100%{ transform:translateY(0) rotate(-4deg);} 50%{ transform:translateY(-10px) rotate(4deg);} }`
+    },
+    // Round bee, buzzing side to side with fluttering wings
+    {
+      animName: 'celeb-buzz',
+      svg: `
+        <ellipse class="celeb-wing-l" cx="42" cy="45" rx="18" ry="12" fill="#dff1ff" opacity="0.8" transform="rotate(-20 42 45)"/>
+        <ellipse class="celeb-wing-r" cx="98" cy="45" rx="18" ry="12" fill="#dff1ff" opacity="0.8" transform="rotate(20 98 45)"/>
+        <line x1="58" y1="30" x2="52" y2="16" stroke="#2a2a2a" stroke-width="2.5" stroke-linecap="round"/>
+        <line x1="82" y1="30" x2="88" y2="16" stroke="#2a2a2a" stroke-width="2.5" stroke-linecap="round"/>
+        <circle cx="52" cy="14" r="3" fill="#2a2a2a"/>
+        <circle cx="88" cy="14" r="3" fill="#2a2a2a"/>
+        <ellipse cx="70" cy="70" rx="40" ry="34" fill="#f5c542"/>
+        <path d="M32 60 Q70 50 108 60 L108 78 Q70 68 32 78 Z" fill="#2a2a2a"/>
+        <circle cx="58" cy="66" r="8" fill="#fff"/>
+        <circle cx="82" cy="66" r="8" fill="#fff"/>
+        <circle cx="58" cy="66" r="5" fill="#2a2a2a"/>
+        <circle cx="82" cy="66" r="5" fill="#2a2a2a"/>
+        <circle cx="59.5" cy="64" r="1.6" fill="#fff"/>
+        <circle cx="83.5" cy="64" r="1.6" fill="#fff"/>
+        <path d="M56 88 Q70 96 84 88" stroke="#2a2a2a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      `,
+      style: `
+        @keyframes celeb-buzz{ 0%,100%{ transform:translateX(-6px) rotate(-3deg);} 50%{ transform:translateX(6px) rotate(3deg);} }
+        .celeb-wing-l{ animation: celeb-flap-l 0.25s ease-in-out infinite alternate; transform-origin: 55px 45px; }
+        .celeb-wing-r{ animation: celeb-flap-r 0.25s ease-in-out infinite alternate; transform-origin: 85px 45px; }
+        @keyframes celeb-flap-l{ from{ transform: rotate(-30deg) scaleY(1);} to{ transform: rotate(-10deg) scaleY(0.85);} }
+        @keyframes celeb-flap-r{ from{ transform: rotate(30deg) scaleY(1);} to{ transform: rotate(10deg) scaleY(0.85);} }
+      `
+    },
+    // Soft round blob with small waving nub-arms
+    {
+      animName: 'celeb-bounce',
+      svg: `
+        <ellipse cx="70" cy="82" rx="48" ry="40" fill="#7fd6c2"/>
+        <ellipse class="celeb-nub-l" cx="26" cy="88" rx="9" ry="14" fill="#7fd6c2"/>
+        <ellipse class="celeb-nub-r" cx="114" cy="88" rx="9" ry="14" fill="#7fd6c2"/>
+        <circle cx="54" cy="72" r="6" fill="#2a2a2a"/>
+        <circle cx="86" cy="72" r="6" fill="#2a2a2a"/>
+        <circle cx="56" cy="69.5" r="2" fill="#fff"/>
+        <circle cx="88" cy="69.5" r="2" fill="#fff"/>
+        <circle cx="44" cy="86" r="6" fill="#f4a0a0" opacity="0.7"/>
+        <circle cx="96" cy="86" r="6" fill="#f4a0a0" opacity="0.7"/>
+        <path d="M56 92 Q70 102 84 92" stroke="#2a2a2a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      `,
+      style: `
+        .celeb-nub-l{ animation: celeb-nub-wave-l 0.5s ease-in-out infinite alternate; transform-origin: 26px 78px; }
+        .celeb-nub-r{ animation: celeb-nub-wave-r 0.5s ease-in-out infinite alternate; transform-origin: 114px 78px; }
+        @keyframes celeb-nub-wave-l{ from{ transform: rotate(-16deg);} to{ transform: rotate(10deg);} }
+        @keyframes celeb-nub-wave-r{ from{ transform: rotate(16deg);} to{ transform: rotate(-10deg);} }
+      `
+    },
+    // A trio of bobbing balloons, one with a smiling face
+    {
+      animName: null,
+      svg: `
+        <line x1="40" y1="90" x2="34" y2="128" stroke="#c9a13b" stroke-width="2"/>
+        <line x1="70" y1="96" x2="70" y2="130" stroke="#c9a13b" stroke-width="2"/>
+        <line x1="100" y1="90" x2="106" y2="128" stroke="#c9a13b" stroke-width="2"/>
+        <ellipse class="celeb-balloon-a" cx="40" cy="55" rx="22" ry="28" fill="#f28b82"/>
+        <ellipse class="celeb-balloon-b" cx="70" cy="45" rx="24" ry="30" fill="#f5c542"/>
+        <ellipse class="celeb-balloon-c" cx="100" cy="55" rx="22" ry="28" fill="#7fb8f0"/>
+        <circle cx="61" cy="40" r="4.5" fill="#2a2a2a"/>
+        <circle cx="79" cy="40" r="4.5" fill="#2a2a2a"/>
+        <path d="M60 52 Q70 60 80 52" stroke="#2a2a2a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      `,
+      style: `
+        .celeb-balloon-a{ animation: celeb-bob 2.2s ease-in-out infinite; }
+        .celeb-balloon-b{ animation: celeb-bob 2.2s ease-in-out infinite 0.3s; }
+        .celeb-balloon-c{ animation: celeb-bob 2.2s ease-in-out infinite 0.6s; }
+        @keyframes celeb-bob{ 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(-8px);} }
+      `
+    }
+  ];
+
+  const pick = characters[Math.floor(Math.random() * characters.length)];
+  const wrapperAnim = pick.animName ? `animation: ${pick.animName} 0.9s ease-in-out infinite;` : '';
+
+  return `
+    <div class="card center" style="padding:32px 16px;">
+      <div style="${wrapperAnim}">
+        <svg viewBox="0 0 140 140" width="140" height="140" style="margin:0 auto 12px; display:block;">
+          ${pick.svg}
+        </svg>
+      </div>
+      <p style="font-family:'Source Serif 4',serif; font-size:20px; font-weight:700; margin:0 0 6px;">Great job!</p>
+      <p style="font-size:14px; color:var(--text-secondary); margin:0;">Now go home and relax!</p>
+    </div>
+    <style>${pick.style}</style>
+  `;
+}
+
 function renderRoute() {
   const el = document.getElementById('screen-route');
   const stops = Store.state.stops.filter(s => s.optimizedPosition != null)
@@ -1407,37 +1520,11 @@ function renderRoute() {
   }
 
   // All stops wrapped up (completed or skipped) — show a celebration
-  // instead of an empty-looking finished list.
+  // instead of an empty-looking finished list. Pick one of a few cute
+  // characters at random so it's not the same image every time.
   const allDone = stops.every(s => s.status === 'completed' || s.status === 'skipped');
   if (allDone) {
-    el.innerHTML = `
-      <div class="card center" style="padding:32px 16px;">
-        <svg viewBox="0 0 160 160" width="140" height="140" style="margin:0 auto 12px; display:block;">
-          <ellipse cx="80" cy="110" rx="46" ry="34" fill="#4a9b3f"/>
-          <g class="wave-arm-left">
-            <ellipse cx="38" cy="100" rx="10" ry="22" fill="#4a9b3f" transform="rotate(-20 38 100)"/>
-          </g>
-          <g class="wave-arm-right">
-            <ellipse cx="122" cy="100" rx="10" ry="22" fill="#4a9b3f" transform="rotate(20 122 100)"/>
-          </g>
-          <circle cx="58" cy="55" r="26" fill="#4a9b3f"/>
-          <circle cx="102" cy="55" r="26" fill="#4a9b3f"/>
-          <circle cx="58" cy="48" r="12" fill="#fff"/>
-          <circle cx="102" cy="48" r="12" fill="#fff"/>
-          <circle cx="60" cy="50" r="6" fill="#1a1a1a"/>
-          <circle cx="104" cy="50" r="6" fill="#1a1a1a"/>
-          <path d="M50 82 Q80 100 110 82" stroke="#1a1a1a" stroke-width="3" fill="none" stroke-linecap="round"/>
-        </svg>
-        <p style="font-family:'Source Serif 4',serif; font-size:20px; font-weight:700; margin:0 0 6px;">Great job!</p>
-        <p style="font-size:14px; color:var(--text-secondary); margin:0;">Now go home and relax!</p>
-      </div>
-      <style>
-        .wave-arm-left{ transform-origin: 38px 82px; animation: wave-left 0.6s ease-in-out infinite alternate; }
-        .wave-arm-right{ transform-origin: 122px 82px; animation: wave-right 0.6s ease-in-out infinite alternate; }
-        @keyframes wave-left{ from{ transform: rotate(-18deg); } to{ transform: rotate(18deg); } }
-        @keyframes wave-right{ from{ transform: rotate(18deg); } to{ transform: rotate(-18deg); } }
-      </style>
-    `;
+    el.innerHTML = renderCelebration();
     return;
   }
 
